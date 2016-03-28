@@ -232,7 +232,7 @@ class CommentVote(models.Model):
     # Post.objects.filter(created_at__gte=today).order_by("-rating")
 # -Hot: Ordered by amount of up-votes in the 3 hours
     # Post.objects.filter(created_at__gte=three_hours)
-    # .order_by("-rating in last 3 hours")
+    # .order_by("-rating(in last 3 hours")
 
 # -Controversial: Ordered by posts with a high number
 #  of both up and down votes

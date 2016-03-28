@@ -22,7 +22,8 @@ class KredditTests(TestCase):
                                             name="TestSubReddit"
                                                                             )
 
-        self.testpost = Post.objects.create(
+        self.testpost = Post.objects.create\
+                                            (
                                             title="PostTest",
                                             description="This is a test post.",
                                             url="test.com",
@@ -31,7 +32,7 @@ class KredditTests(TestCase):
                                             subreddit=self.testsubreddit
                                                                             )
 
-    def test_today_count(self):
+    def test_current_count(self):
         self.testsubreddit.post_set.create\
                                             (
                                             title="PostTest2",
@@ -44,6 +45,9 @@ class KredditTests(TestCase):
         self.assertEqual(self.testsubreddit.current_count,
                                             2, "Post count broken."
                                                                             )
+
+
+
 
 
 
