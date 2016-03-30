@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>new subreddit</title>
+</head>
+<body>
+    <h3>New Subreddit</h3>
+    <form method="post" action="{% url "subreddit_create" %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" name="submit" value="submit">
+    </form>
+</body>
+</html>

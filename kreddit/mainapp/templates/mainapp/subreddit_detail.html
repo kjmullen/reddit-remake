@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ subreddit.name }}</title>
+</head>
+<body>
+    <h1>{{ subreddit.name }}</h1>
+    <ul>
+        <li>description: {{ subreddit.description }}</li>
+        <li>post count: {{ subreddit.current_count }}</li>
+        <li>({{ subreddit.today_count }} today)</li>
+    </ul>
+    <h2>Top Posts</h2>
+    <ul>
+        {% for post in posts %}
+            <li>
+                <a href="{% url 'post_detail' post.id %}">
+                {{ post.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

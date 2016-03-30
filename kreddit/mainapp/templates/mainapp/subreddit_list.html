@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>subreddits</title>
+</head>
+    <body>
+        <h1>subreddits</h1>
+        {%  if subreddits %}
+        <ol>
+            {% for subreddit in subreddits %}
+                <li> <a href="{% url 'subreddit_detail' subreddit.id %}">
+                {{ subreddit.name }}</a>
+                    <p>{{ subreddit.description }}</p>
+                <p>post count: {{ subreddit.current_count }}</p>
+                </li>
+
+
+            {% endfor %}
+        </ol>
+        {% endif %}
+    </body>
+</html>
