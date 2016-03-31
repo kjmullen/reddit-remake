@@ -21,10 +21,8 @@
             <p>new post___{{ post.is_recent }}___</p>
             <p> hot___{{ post.is_hot }}___ </p>
         </li>
-
-
-
     </ul>
+    <p><a href="{% url "comment_create" %}">new comment</a></p>
 <ul>
     {% for comment in comments %}
         <li>

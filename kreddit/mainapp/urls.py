@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from mainapp.views import SubredditList, SubredditDetail, PostDetail, \
-    SubredditCreate, SubredditUpdate
+    SubredditCreate, SubredditUpdate, PostCreate, CommentCreate
 
 urlpatterns = [
     url(r'^subreddits/$', SubredditList.as_view(), name="subreddit_list"),
@@ -11,6 +11,9 @@ urlpatterns = [
     url(r'^subreddits/create/$', SubredditCreate.as_view(),
         name="subreddit_create"),
     url(r'^subreddits/update/(?P<id>\d+)/$', SubredditUpdate.as_view(),
-        name="subreddit_update")
-
+        name="subreddit_update"),
+    url(r'^subreddits/post_create/$', PostCreate.as_view(),
+        name="post_create"),
+    url(r'^subreddits/create_comment/$', CommentCreate.as_view(),
+        name="comment_create"),
 ]

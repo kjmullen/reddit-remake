@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Creating A New Subreddit</title>
+    <title>New Post on Kreddit</title>
 </head>
 <body>
-    <h3>New Subreddit</h3>
-    <form method="post" action="{% url "subreddit_create" %}">
+    <h3>New Post</h3>
+    <form method="post" action="{% url "post_create"  %}">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" name="submit" value="submit">

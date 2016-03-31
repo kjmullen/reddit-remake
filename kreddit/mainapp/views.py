@@ -1,88 +1,94 @@
-from django.core.urlresolvers import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Count
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import View
+from django.views.generic import ListView, DetailView, UpdateView, \
+    CreateView
 
-from mainapp.forms import SubredditForm
-from mainapp.models import Subreddit, Post
-
-
-class SubredditList(View):
-
-    def get(self, request):
-
-        subreddits = Subreddit.objects.annotate(num_posts=Count('post'))\
-            .order_by('-num_posts')
-
-        return render(request, "mainapp/subreddit_list.html",
-                      {"subreddits": subreddits})
+from mainapp.forms import SubredditForm, PostForm, CommentForm
+from mainapp.models import Subreddit, Post, Comment
 
 
-class SubredditDetail(View):
+class SubredditList(ListView):
 
-    def get(self, request, id):
+    model = Subreddit
+    queryset = Subreddit.objects.annotate(num_posts=Count('post')) \
+        .order_by('-num_posts')
 
-        subreddit = get_object_or_404(Subreddit, pk=id)
-        posts = subreddit.post_set.order_by('-created_at')[:20]
-
-        return render(request, "mainapp/subreddit_detail.html",
-                      {"subreddit": subreddit, "posts": posts})
-
-
-class PostDetail(View):
-
-    def get(self, request, id):
-
-        post = get_object_or_404(Post, pk=id)
-        comments = post.comment_set.order_by('-created_at')
-
-        return render(request, "mainapp/post_detail.html",
-                      {'post': post, 'comments': comments})
+    # paginate_by = 20
+    # add if paginated to template
 
 
-class SubredditCreate(View):
+class SubredditDetail(DetailView):
 
-    def get(self, request):
-        form = SubredditForm()
+    model = Subreddit
+    pk_url_kwarg = 'id'
 
-        return render(request, "mainapp/subreddit_create.html",
-                      {"form": form})
-
-    def post(self, request):
-
-        form = SubredditForm(request.POST)
-
-        if form.is_valid():
-            subreddit = form.save(commit=False)
-            subreddit.user = request.user
-            subreddit.save()
-
-            return redirect(reverse("subreddit_list"))
-
-        return render(request, "mainapp/subreddit_create.html",
-                      {"form": form})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['posts'] = self.object.post_set.all().order_by('-created_at')
+        return context
 
 
-class SubredditUpdate(View):
+class PostDetail(DetailView):
 
-    def get(self, request, id):
+    model = Post
+    pk_url_kwarg = 'id'
 
-        subreddit = get_object_or_404(Subreddit, pk=id)
-        form = SubredditForm(instance=subreddit)
 
-        return render(request, "mainapp/subreddit_update.html",
-                      {"form": form, "subreddit": subreddit})
+class SubredditCreate(LoginRequiredMixin, CreateView):
 
-    def post(self, request, id):
-        subreddit = get_object_or_404(Subreddit, pk=id)
+    model = Subreddit
+    form_class = SubredditForm
 
-        form = SubredditForm(data=request.POST, instance=subreddit)
+    success_url = reverse_lazy('subreddit_list')
+    template_name_suffix = '_create'
 
-        if form.is_valid():
-            subreddit = form.save(commit=False)
-            subreddit.user = request.user
-            subreddit.save()
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
-            return redirect(reverse("subreddit_list"))
-        return render(request, "mainapp/subreddit_update.html",
-                      {"form": form, "subreddit": subreddit})
+
+class SubredditUpdate(LoginRequiredMixin, UpdateView):
+
+    model = Subreddit
+    pk_url_kwarg = 'id'
+    form_class = SubredditForm
+
+    template_name_suffix = "_update"
+
+    def get_success_url(self):
+        return reverse('subreddit_detail', args=(self.object.id,))
+
+
+class CommentDetail(DetailView):
+
+    model = Comment
+    pk_url_kwarg = 'id'
+
+
+class PostCreate(LoginRequiredMixin, CreateView):
+
+    model = Post
+    form_class = PostForm
+    pk_url_kwarg = 'id'
+
+    template_name = 'mainapp/post_create.html'
+    success_url = reverse_lazy('subreddit_list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+class CommentCreate(LoginRequiredMixin, CreateView):
+
+    model = Comment
+    form_class = CommentForm
+    pk_url_kwarg = 'id'
+
+    template_name = 'mainapp/comment_create.html'
+    success_url = reverse_lazy('subreddit_list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)

@@ -2,22 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>subreddits</title>
+    <title>Subreddits</title>
 </head>
     <body>
         <h1>subreddits</h1>
-        {%  if subreddits %}
+
+            {% if user.is_authenticated %}
+
+            <p align="center">
+            {{ user.username }} signed in <a href="{% url 'logout' %}">
+                sign out</a>
+
+            {% else %}
+                <p align="center"><a href="{% url "login" %}">login</a></p>
+
+            {% endif %}
+
+            <p><a href="{% url "post_create" %}">new post</a></p>
+
+        {%  if subreddit_list %}
         <ol>
-            {% for subreddit in subreddits %}
-                <li> <a href="{% url 'subreddit_detail' subreddit.id %}">
-                {{ subreddit.name }}</a>
+            {% for subreddit in subreddit_list %}
+                <li>
+                    <a href="{% url 'subreddit_detail' subreddit.id %}">
+                    {{ subreddit.name }}
+                    </a>
                     <p>{{ subreddit.description }}</p>
-                <p>post count: {{ subreddit.current_count }}</p>
+                    <p>post count: {{ subreddit.current_count }}</p>
                 </li>
 
 
             {% endfor %}
         </ol>
         {% endif %}
+
+
     </body>
 </html>
