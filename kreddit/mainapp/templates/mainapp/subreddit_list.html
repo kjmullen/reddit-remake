@@ -18,7 +18,7 @@
 
             {% endif %}
 
-            <p><a href="{% url "post_create" %}">new post</a> &nbsp;&nbsp;
+            <p><a href="{% url "post_create" %}">new post</a>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <a href="{% url 'subreddit_create' %}">create subreddit</a>
             </p>
@@ -36,6 +36,15 @@
 
             {% endfor %}
         </ol>
+        {% endif %}
+        {% if is_paginated %}
+            {% if page_obj.has_previous %}
+                <a href="{% url "subreddit_list" %}?page={{ page_obj.previous_page_number }}"><--Prev</a>
+            {% endif %}
+            {{ page_obj }}
+            {% if page_obj.has_next %}
+                <a href="{% url "subreddit_list" %}?page={{ page_obj.next_page_number }}">Next--></a>
+            {% endif %}
         {% endif %}
 
 
