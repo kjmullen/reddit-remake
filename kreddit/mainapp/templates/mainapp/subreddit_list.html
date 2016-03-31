@@ -18,8 +18,10 @@
 
             {% endif %}
 
-            <p><a href="{% url "post_create" %}">new post</a></p>
-
+            <p><a href="{% url "post_create" %}">new post</a> &nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{% url 'subreddit_create' %}">create subreddit</a>
+            </p>
         {%  if subreddit_list %}
         <ol>
             {% for subreddit in subreddit_list %}

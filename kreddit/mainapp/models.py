@@ -75,6 +75,7 @@ class Post(models.Model):
         three_hours = timezone.now() - datetime.timedelta(hours=3)
         return self.comment_set.filter(created_at__gte=three_hours).count() > 3
 
+
     def up_votes(self):
 
         return self.postvote_set.filter(why__contains='U').count() - \

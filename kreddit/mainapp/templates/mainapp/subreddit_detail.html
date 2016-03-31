@@ -19,7 +19,9 @@
                 {{ post.title }}</a>&nbsp;&nbsp;&nbsp;{{ post.created_at }}
             </li>
         {% endfor %}
-    </ul>
 
+    </ul>
+    <a href="{% url 'subreddit_update' subreddit.id %}">edit subreddit</a>
+<p><a href="{% url 'subreddit_list' %}"> return to subreddits</a></p>
 </body>
 </html>

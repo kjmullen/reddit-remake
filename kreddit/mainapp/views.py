@@ -54,7 +54,7 @@ class SubredditUpdate(LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'id'
     form_class = SubredditForm
 
-    template_name_suffix = "_update"
+    template_name = "mainapp/subreddit_update.html"
 
     def get_success_url(self):
         return reverse('subreddit_detail', args=(self.object.id,))
